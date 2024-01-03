@@ -1,8 +1,12 @@
 "use client";
 
+import { AuthContext } from "@/contexts/AuthContext";
 import { LoginForm } from "@/components/login/loginForm";
+import { useContext } from "react";
 
 export default function LoginPage() {
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -21,6 +25,7 @@ export default function LoginPage() {
       const { accessToken, refreshToken } = data;
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
+      setIsLoggedIn(true);
     } catch (error) {
       console.error(error);
     }
