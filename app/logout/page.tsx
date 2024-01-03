@@ -1,12 +1,12 @@
 "use client";
 
-import { AuthContext } from "@/contexts/AuthContext";
+import { AppContext } from "@/contexts/AppContext";
 import { useContext } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 export default function LogoutPage() {
   const router = useRouter();
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
 
   sessionStorage.removeItem("accessToken");
   sessionStorage.removeItem("refreshToken");

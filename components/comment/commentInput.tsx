@@ -1,4 +1,4 @@
-export function CommentInput({ onSubmit }) {
+export function CommentInput({ onSubmit, comment, setComment }) {
   return (
     <form onSubmit={onSubmit}>
       <div className="form-control">
@@ -6,6 +6,8 @@ export function CommentInput({ onSubmit }) {
           name="content"
           placeholder="댓글을 입력해주세요."
           className="textarea textarea-bordered textarea-primary"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
         ></textarea>
       </div>
       <div className="form-control mt-2">

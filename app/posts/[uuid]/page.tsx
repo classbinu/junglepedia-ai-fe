@@ -42,23 +42,39 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
   const submitComment = async (event) => {
     event.preventDefault();
-    let content = event.target.content.value;
+    let content = comment;
 
     const newComment = { content };
     newComment["postId"] = params.uuid;
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/comments/`,
+      setComment("");
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        },
+        body: JSON.stringify(newComment),
+      });
+      await fetchComments();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCommentDelete = async (id) => {
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/comments/${id}`,
         {
-          method: "POST",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
           },
-          body: JSON.stringify(newComment),
         }
       );
-      setComment("");
       await fetchComments();
     } catch (error) {
       console.error(error);
@@ -77,12 +93,15 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         title={post.title}
         content={post.content}
         onSubmit={submitComment}
+        comment={comment}
+        setComment={setComment}
       />
       {commnets.map((comment) => (
         <CommentListCard
           key={comment.id}
           id={comment.id}
           content={comment.content}
+          handleCommentDelete={handleCommentDelete}
         />
       ))}
     </>

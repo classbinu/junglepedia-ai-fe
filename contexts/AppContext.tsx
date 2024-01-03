@@ -2,12 +2,12 @@
 
 import { createContext } from "react";
 
-interface AuthContextType {
+interface AppContextType {
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
-export const AuthContext = createContext<AuthContextType>({
+export const AppContext = createContext<AppContextType>({
   isLoggedIn: false,
   setIsLoggedIn: () => {},
 });

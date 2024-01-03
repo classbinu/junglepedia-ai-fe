@@ -1,11 +1,11 @@
 "use client";
 
-import { AuthContext } from "@/contexts/AuthContext";
+import { AppContext } from "@/contexts/AppContext";
 import Link from "next/link";
 import { useContext } from "react";
 
 export function MainNav() {
-  const isLoggedIn = useContext(AuthContext).isLoggedIn;
+  const isLoggedIn = useContext(AppContext).isLoggedIn;
 
   return (
     <div className="navbar bg-base-100">
