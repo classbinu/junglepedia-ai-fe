@@ -32,13 +32,13 @@ export function MainNav() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>모의면접</a>
+              <Link href="/">모의면접</Link>
             </li>
             <li>
               <Link href="/posts">답변보기</Link>
             </li>
             <li>
-              <a>문의</a>
+              <Link href="/">문의</Link>
             </li>
           </ul>
         </div>

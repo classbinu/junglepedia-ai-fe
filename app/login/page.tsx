@@ -3,8 +3,10 @@
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoginForm } from "@/components/login/loginForm";
 import { useContext } from "react";
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
+  const router = useRouter();
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
   const handleLogin = async (event) => {
@@ -26,6 +28,7 @@ export default function LoginPage() {
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
       setIsLoggedIn(true);
+      router.push("/");
     } catch (error) {
       console.error(error);
     }
