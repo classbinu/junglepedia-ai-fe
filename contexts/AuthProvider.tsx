@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState } from "react";
 
-import { AuthContext } from "@/contexts/AuthContext";
+import { AuthContext } from "./AuthContext";
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

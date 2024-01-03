@@ -1,6 +1,12 @@
+"use client";
+
+import { AuthContext } from "@/contexts/AuthContext";
 import Link from "next/link";
+import { useContext } from "react";
 
 export function MainNav() {
+  const isLoggedIn = useContext(AuthContext).isLoggedIn;
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -54,7 +60,11 @@ export function MainNav() {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link href="/login">로그인</Link>
+        {isLoggedIn ? (
+          <Link href="/logout">로그아웃</Link>
+        ) : (
+          <Link href="/login">로그인</Link>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 
+import { AuthProvider } from "@/contexts/AuthProvider";
 import { Inter } from "next/font/google";
 import { MainNav } from "@/components/navigation/navbar/mainNav";
 import type { Metadata } from "next";
@@ -19,8 +20,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.className} container mx-auto`}>
+        <AuthProvider>
           <MainNav />
           {children}
+        </AuthProvider>
       </body>
     </html>
   );
