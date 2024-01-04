@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import Loading from "./loading";
 import { PostListCard } from "@/components/post/postListCard";
 
 export default function PostListPage() {
@@ -9,7 +10,9 @@ export default function PostListPage() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts`
+      );
       const data = await response.json();
       setPosts(data);
     } catch (error) {

@@ -32,13 +32,10 @@ export function MainNav() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <Link href="/">모의면접</Link>
+              <Link href="/interview">모의면접</Link>
             </li>
             <li>
               <Link href="/posts">답변보기</Link>
-            </li>
-            <li>
-              <Link href="/">문의</Link>
             </li>
           </ul>
         </div>
@@ -49,13 +46,10 @@ export function MainNav() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>모의면접</a>
+            <Link href="/interview">모의면접</Link>
           </li>
           <li>
             <Link href="/posts">답변보기</Link>
-          </li>
-          <li>
-            <a>문의</a>
           </li>
         </ul>
       </div>

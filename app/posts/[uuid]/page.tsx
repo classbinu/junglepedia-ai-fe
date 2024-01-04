@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { CommentInput } from "@/components/comment/commentInput";
 import { CommentListCard } from "@/components/comment/commentListCard";
 import { PostDetailCard } from "@/components/post/postDetailCard";
+import { useRouter } from "next/navigation";
 
 export default function PostPage({ params }: { params: { uuid: string } }) {
+  const router = useRouter();
+
   const [post, setPost] = useState({
     id: "",
     title: "Loading...",
@@ -44,6 +47,10 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     event.preventDefault();
     let content = comment;
 
+    if (content === "") {
+      return alert("댓글을 입력해주세요.");
+    }
+
     const newComment = { content };
     newComment["postId"] = params.uuid;
 
@@ -63,18 +70,30 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     }
   };
 
+  const handlePostDelete = async (id) => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        },
+      });
+      router.push("/posts");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleCommentDelete = async (id) => {
     try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/comments/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-          },
-        }
-      );
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        },
+      });
       await fetchComments();
     } catch (error) {
       console.error(error);
@@ -95,6 +114,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         onSubmit={submitComment}
         comment={comment}
         setComment={setComment}
+        handleDelete={handlePostDelete}
       />
       {commnets.map((comment) => (
         <CommentListCard
