@@ -39,8 +39,8 @@ export function MainNav() {
             </li>
           </ul>
         </div>
-        <Link href="/" className="btn btn-ghost text-xl">
-          정글피디아
+        <Link href="/" className="btn btn-ghost text-xl text-primary">
+          정글피디아 AI
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">

@@ -7,10 +7,10 @@ export default function Home() {
         개발자 면접 준비는
       </h1>
       <h1
-        className="text-6xl font-semibold animate__animated animate__fadeInUp"
+        className="text-6xl font-bold text-primary animate__animated animate__fadeInUp"
         style={{ animationDelay: "0.5s" }}
       >
-        정글피디아
+        정글피디아 AI
       </h1>
     </main>
   );

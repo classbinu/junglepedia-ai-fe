@@ -18,6 +18,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
   const [commnets, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchPost = async () => {
     try {
@@ -51,6 +52,8 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
       return alert("댓글을 입력해주세요.");
     }
 
+    setIsLoading(true);
+
     const newComment = { content };
     newComment["postId"] = params.uuid;
 
@@ -64,6 +67,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         },
         body: JSON.stringify(newComment),
       });
+      setIsLoading(false);
       await fetchComments();
     } catch (error) {
       console.error(error);
@@ -115,6 +119,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         comment={comment}
         setComment={setComment}
         handleDelete={handlePostDelete}
+        disabled={isLoading}
       />
       {commnets.map((comment) => (
         <CommentListCard

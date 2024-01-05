@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import "animate.css";
 
 import { AppProvider } from "@/contexts/AppProvider";
+import { Footer } from "@/components/navigation/footer";
 import { Inter } from "next/font/google";
 import { MainNav } from "@/components/navigation/navbar/mainNav";
 import type { Metadata } from "next";
@@ -20,11 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={`${inter.className} container mx-auto`}>
-        <AppProvider>
-          <MainNav />
-          {children}
-        </AppProvider>
+      <body className={`${inter.className} whitespace-pre-wrap`}>
+        <div className="container mx-auto min-h-screen">
+          <AppProvider>
+            <MainNav />
+            {children}
+          </AppProvider>
+        </div>
+        <Footer />
       </body>
     </html>
   );

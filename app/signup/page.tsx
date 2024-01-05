@@ -11,7 +11,7 @@ export default function SignupPage() {
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, isAdmin: true }),
       });
     } catch (error) {
       console.error(error);

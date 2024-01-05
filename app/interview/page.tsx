@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { InterviewForm } from "@/components/interview/interviewForm";
+import Swal from "sweetalert2";
 import topics from "@/data/topics";
 import { useRouter } from "next/navigation";
 
@@ -11,6 +12,7 @@ export default function InterviewPage() {
 
   const [topic, setTopic] = useState("");
   const [answer, setAnswer] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectTopic = () => {
     setTopic("");
@@ -28,11 +30,13 @@ export default function InterviewPage() {
       return alert("답변을 입력해주세요.");
     }
 
+    setIsLoading(true);
+    showAdModal();
+
     const newAnswer = { content };
     newAnswer["title"] = topic;
 
     try {
-      setAnswer("");
       const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/`, {
         method: "POST",
         headers: {
@@ -43,6 +47,7 @@ export default function InterviewPage() {
       });
       const data = await res.json();
       if (data.id) {
+        Swal.close();
         route.push(`/posts/${data.id}`);
       } else {
         alert("답변을 저장할 수 없습니다.");
@@ -50,6 +55,39 @@ export default function InterviewPage() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const showAdModal = () => {
+    let timerInterval;
+    Swal.fire({
+      title: "AI가 답변을 분석하고 있어요🤖",
+      html: `<img src="https://swjungle.net/static/hub/images/graduate06.png"
+      alt="Custom image" id="ad" class="block mx-auto cursor-pointer">
+      분석 완료 예정까지 <b></b>ms 남았어요.`,
+      timer: 50000,
+      timerProgressBar: true,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer = Swal.getPopup().querySelector("b");
+        timerInterval = setInterval(() => {
+          timer.textContent = `${Swal.getTimerLeft()}`;
+        }, 100);
+      },
+      didRender: () => {
+        document.getElementById("ad").onclick = function () {
+          open("https://jungle.krafton.com/");
+        };
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log("I was closed by the timer");
+      }
+    });
   };
 
   useEffect(() => {
@@ -68,7 +106,11 @@ export default function InterviewPage() {
         </div>
       </div>
       <div className="flex justify-center mt-10">
-        <button className="btn" onClick={selectTopic}>
+        <button
+          className="btn btn-outline btn-primary"
+          disabled={isLoading}
+          onClick={selectTopic}
+        >
           다른 문제
         </button>
       </div>

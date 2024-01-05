@@ -9,6 +9,7 @@ export function PostDetailCard({
   comment,
   setComment,
   handleDelete,
+  disabled,
 }) {
   return (
     <div className="card w-full bg-base-100 shadow-xl m-2">
@@ -30,6 +31,7 @@ export function PostDetailCard({
           onSubmit={onSubmit}
           comment={comment}
           setComment={setComment}
+          disabled={disabled}
         />
       </div>
     </div>

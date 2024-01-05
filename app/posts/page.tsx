@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import Loading from "./loading";
 import { PostListCard } from "@/components/post/postListCard";
 
 export default function PostListPage() {
