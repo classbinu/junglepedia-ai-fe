@@ -18,10 +18,10 @@ export function CommentListCard({
       </div>
       <div className="card-body py-4">
         <p>{comment.content}</p>
-        <div className="flex justify-end">
+        <div className="text-right">
           <button
             onClick={() => handleCommentDelete(comment.id)}
-            className={`btn btn-xs btn-error${
+            className={`btn btn-xs btn-error ${
               decodedToken && decodedToken.sub === comment.author.id
                 ? ""
                 : "hidden"
