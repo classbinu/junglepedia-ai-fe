@@ -24,9 +24,16 @@ export default function PostListPage() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/posts?offset=${myOffset}&limit=${limit}`
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/my?offset=${myOffset}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+          },
+        }
       );
       const newPosts = await response.json();
+
+      console.log(newPosts);
 
       if (newPosts.length < limit) {
         setMyAllDataLoaded(true);

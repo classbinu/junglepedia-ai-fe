@@ -35,7 +35,7 @@ export function MainNav() {
               <Link href="/interview" className="py-4">모의면접</Link>
             </li>
             <li>
-              <Link href="/posts" className="py-4">내 답변</Link>
+              <Link href="/myposts" className="py-4">내 답변</Link>
             </li>
             <li>
               <Link href="/posts" className="py-4">모든 답변</Link>
