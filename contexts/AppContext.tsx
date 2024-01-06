@@ -11,6 +11,13 @@ interface AppContextType {
   setPosts: Function;
   allDataLoaded: boolean;
   setAllDataLoaded: Function;
+
+  myOffset: number;
+  setMyOffset: Function;
+  myPosts: Array<any>;
+  setMyPosts: Function;
+  myAllDataLoaded: boolean;
+  setMyAllDataLoaded: Function;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -22,4 +29,11 @@ export const AppContext = createContext<AppContextType>({
   setPosts: () => {},
   allDataLoaded: false,
   setAllDataLoaded: () => {},
+
+  myOffset: 0,
+  setMyOffset: () => {},
+  myPosts: [],
+  setMyPosts: () => {},
+  myAllDataLoaded: false,
+  setMyAllDataLoaded: () => {},
 });

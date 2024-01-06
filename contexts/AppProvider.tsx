@@ -10,6 +10,10 @@ export const AppProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
+  const [myOffset, setMyOffset] = useState(0);
+  const [myPosts, setMyPosts] = useState([]);
+  const [myAllDataLoaded, setMyAllDataLoaded] = useState(false);
+
   useEffect(() => {
     const accessToken = sessionStorage.getItem("accessToken");
     if (accessToken) {
@@ -28,6 +32,13 @@ export const AppProvider = ({ children }) => {
         setPosts,
         allDataLoaded,
         setAllDataLoaded,
+
+        myOffset,
+        setMyOffset,
+        myPosts,
+        setMyPosts,
+        myAllDataLoaded,
+        setMyAllDataLoaded,
       }}
     >
       {children}

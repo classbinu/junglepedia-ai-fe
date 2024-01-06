@@ -28,14 +28,17 @@ export function MainNav() {
             </svg>
           </div>
           <ul
-            tabIndex={0}
+            tabIndex={0} // 햄버거 버튼 메뉴 부분
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <Link href="/interview">모의면접</Link>
+              <Link href="/interview" className="py-4">모의면접</Link>
             </li>
             <li>
-              <Link href="/posts">답변보기</Link>
+              <Link href="/posts" className="py-4">내 답변</Link>
+            </li>
+            <li>
+              <Link href="/posts" className="py-4">모든 답변</Link>
             </li>
           </ul>
         </div>
@@ -49,7 +52,10 @@ export function MainNav() {
             <Link href="/interview">모의면접</Link>
           </li>
           <li>
-            <Link href="/posts">답변보기</Link>
+            <Link href="/myposts">내 답변</Link>
+          </li>
+          <li>
+            <Link href="/posts">모든 답변</Link>
           </li>
         </ul>
       </div>
