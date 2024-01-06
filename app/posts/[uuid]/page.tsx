@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { CommentInput } from "@/components/comment/commentInput";
 import { CommentListCard } from "@/components/comment/commentListCard";
 import { PostDetailCard } from "@/components/post/postDetailCard";
+import { decodeJWT } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 export default function PostPage({ params }: { params: { uuid: string } }) {
@@ -14,19 +14,33 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     id: "",
     title: "Loading...",
     content: "Loading...",
+    author: {},
   });
 
   const [commnets, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [decodedToken, setDecodedToken] = useState({
+    sub: "",
+    email: "",
+    iat: 0,
+    exp: 0,
+  });
+
+  useEffect(() => {
+    const tokenData = decodeJWT();
+    setDecodedToken(
+      tokenData as { sub: string; email: string; iat: number; exp: number }
+    );
+  }, []);
 
   const fetchPost = async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}`
       );
-      const data = await response.json();
-      setPost(data);
+      const post = await response.json();
+      setPost(post);
     } catch (error) {
       console.error(error);
     }
@@ -113,20 +127,20 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     <>
       <PostDetailCard
         id={post.id}
-        title={post.title}
-        content={post.content}
+        post={post}
         onSubmit={submitComment}
         comment={comment}
         setComment={setComment}
         handleDelete={handlePostDelete}
         disabled={isLoading}
+        decodedToken={decodedToken}
       />
       {commnets.map((comment) => (
         <CommentListCard
           key={comment.id}
-          id={comment.id}
-          content={comment.content}
+          comment={comment}
           handleCommentDelete={handleCommentDelete}
+          decodedToken={decodedToken}
         />
       ))}
     </>

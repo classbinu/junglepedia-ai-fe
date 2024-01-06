@@ -1,16 +1,27 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
+import { AppContext } from "@/contexts/AppContext";
 import { PostListCard } from "@/components/post/postListCard";
 
 export default function PostListPage() {
-  const [posts, setPosts] = useState([]);
-  const [offset, setOffset] = useState(0);
-  const [allDataLoaded, setAllDataLoaded] = useState(false);
-  const limit = 10;
+  const [isLoading, setIsLoading] = useState(false);
+  const limit = 20;
+  const { offset, setOffset } = useContext(AppContext);
+  const { posts, setPosts } = useContext(AppContext);
+  const { allDataLoaded, setAllDataLoaded } = useContext(AppContext);
 
   const fetchPosts = async () => {
+    if (posts.length > 0 && posts.length > offset) {
+      return; // 이미 충분한 게시글이 로드되었으므로 fetch하지 않습니다.
+    }
+
+    if (isLoading) {
+      console.log("already loading");
+      return;
+    }
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/posts?offset=${offset}&limit=${limit}`
@@ -19,40 +30,44 @@ export default function PostListPage() {
 
       if (newPosts.length < limit) {
         setAllDataLoaded(true);
-        console.log(`allDataLoaded: ${allDataLoaded}`);
       }
-
-      setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+      // 특정 조건에서는 중복 렌더링 문제가 발생해서 중복 제거 로직을 추가함. offset 관리 방식 변경하면서 해결될 수도 있음.
+      setPosts((prevPosts) => {
+        const existingPostIds = new Set(prevPosts.map((post) => post.id));
+        const uniqueNewPosts = newPosts.filter(
+          (post) => !existingPostIds.has(post.id)
+        );
+        return [...prevPosts, ...uniqueNewPosts];
+      });
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const lastInvocation = useRef(0); // invacation = 발동
-  const throttleInterval = 100;
-
   useEffect(() => {
+    let debounceTimer: NodeJS.Timeout;
     const handleScroll = () => {
-      const now = Date.now();
-
-      if (now - lastInvocation.current > throttleInterval) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
         if (
           window.innerHeight + document.documentElement.scrollTop >=
-            document.documentElement.offsetHeight - 100 &&
+            document.documentElement.offsetHeight - 400 &&
           !allDataLoaded
         ) {
           setOffset((prevOffset) => prevOffset + limit);
         }
-        lastInvocation.current = now;
-      }
+      }, 100);
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [allDataLoaded]);
+  }, [allDataLoaded, setOffset]);
 
   useEffect(() => {
     fetchPosts();
-  }, [offset]);
+  }, [offset, fetchPosts]);
 
   return (
     <>
