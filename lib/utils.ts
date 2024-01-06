@@ -1,3 +1,5 @@
+"use client";
+
 import { JwtPayload as OriginalJwtPayload } from "jwt-decode";
 import { jwtDecode } from "jwt-decode";
 

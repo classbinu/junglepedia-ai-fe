@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { AppContext } from "@/contexts/AppContext";
 import { PostListCard } from "@/components/post/postListCard";
@@ -12,70 +12,39 @@ export default function PostListPage() {
   const { posts, setPosts } = useContext(AppContext);
   const { allDataLoaded, setAllDataLoaded } = useContext(AppContext);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      if (posts.length > 0 && posts.length > offset) {
-        return; // 이미 충분한 게시글이 로드되었으므로 fetch하지 않습니다.
-      }
+  const fetchPosts = useCallback(async () => {
+    if (posts.length > 0 && posts.length > offset) {
+      return; // 이미 충분한 게시글이 로드되었으므로 fetch하지 않습니다.
+    }
 
-      if (isLoading) {
-        console.log("already loading");
-        return;
+    if (isLoading) {
+      console.log("already loading");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts?offset=${offset}&limit=${limit}`
+      );
+      const newPosts = await response.json();
+
+      if (newPosts.length < limit) {
+        setAllDataLoaded(true);
       }
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_API}/posts?offset=${offset}&limit=${limit}`
+      // 특정 조건에서는 중복 렌더링 문제가 발생해서 중복 제거 로직을 추가함. offset 관리 방식 변경하면서 해결될 수도 있음.
+      setPosts((prevPosts) => {
+        const existingPostIds = new Set(prevPosts.map((post) => post.id));
+        const uniqueNewPosts = newPosts.filter(
+          (post) => !existingPostIds.has(post.id)
         );
-        const newPosts = await response.json();
-
-        if (newPosts.length < limit) {
-          setAllDataLoaded(true);
-        }
-        // 특정 조건에서는 중복 렌더링 문제가 발생해서 중복 제거 로직을 추가함. offset 관리 방식 변경하면서 해결될 수도 있음.
-        setPosts((prevPosts) => {
-          const existingPostIds = new Set(prevPosts.map((post) => post.id));
-          const uniqueNewPosts = newPosts.filter(
-            (post) => !existingPostIds.has(post.id)
-          );
-          return [...prevPosts, ...uniqueNewPosts];
-        });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    let debounceTimer: NodeJS.Timeout;
-    const handleScroll = () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        if (
-          window.innerHeight + document.documentElement.scrollTop >=
-            document.documentElement.offsetHeight - 400 &&
-          !allDataLoaded
-        ) {
-          setOffset((prevOffset) => prevOffset + limit);
-        }
-      }, 100);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-
-    fetchPosts(); // Call fetchPosts inside the useEffect callback.
-  }, [
-    allDataLoaded,
-    setOffset,
-    posts.length,
-    offset,
-    limit,
-    setIsLoading,
-    setAllDataLoaded,
-    setPosts,
-    isLoading,
-  ]);
+        return [...prevPosts, ...uniqueNewPosts];
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [posts.length, offset, isLoading, setPosts, setAllDataLoaded]);
 
   useEffect(() => {
     let debounceTimer: NodeJS.Timeout;
@@ -97,8 +66,8 @@ export default function PostListPage() {
   }, [allDataLoaded, setOffset]);
 
   useEffect(() => {
-    setPosts();
-  }, [offset, setPosts]);
+    fetchPosts();
+  }, [fetchPosts, offset, setPosts]);
 
   return (
     <>
