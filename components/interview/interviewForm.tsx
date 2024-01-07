@@ -1,7 +1,12 @@
 import { AppContext } from "@/contexts/AppContext";
 import { useContext } from "react";
 
-export function InterviewForm({ onSubmit, answer, setAnswer }) {
+export function InterviewForm({
+  onSubmit,
+  answer,
+  setAnswer,
+  answerPostLoading,
+}) {
   const isLoggedIn = useContext(AppContext).isLoggedIn;
   const maxAnswerLength = 1000;
   return (
@@ -31,7 +36,7 @@ export function InterviewForm({ onSubmit, answer, setAnswer }) {
           type="submit"
           value={isLoggedIn ? "답변 제출" : "로그인이 필요합니다."}
           className="btn btn-primary"
-          disabled={!isLoggedIn}
+          disabled={!isLoggedIn || answerPostLoading}
         />
       </div>
     </form>

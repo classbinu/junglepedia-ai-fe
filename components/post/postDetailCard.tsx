@@ -7,7 +7,8 @@ export function PostDetailCard({
   comment,
   setComment,
   handleDelete,
-  disabled,
+  postDeleteLoading,
+  commentPostLoading,
   decodedToken,
 }) {
   return (
@@ -19,6 +20,7 @@ export function PostDetailCard({
         <div className="text-right">
           <button
             onClick={() => handleDelete(id)}
+            disabled={postDeleteLoading}
             className={`btn btn-xs btn-error ${
               decodedToken && decodedToken.sub === post.author.id
                 ? ""
@@ -35,7 +37,7 @@ export function PostDetailCard({
           onSubmit={onSubmit}
           comment={comment}
           setComment={setComment}
-          disabled={disabled}
+          disabled={commentPostLoading}
         />
       </div>
     </div>

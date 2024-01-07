@@ -1,7 +1,7 @@
 "use client";
 
 import { decodeToken, getAccessTokenAndValidate } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { CommentListCard } from "@/components/comment/commentListCard";
 import { PostDetailCard } from "@/components/post/postDetailCard";
@@ -19,7 +19,9 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
   const [commnets, setComments] = useState([]);
   const [comment, setComment] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [postDeleteLoading, setPostDeleteLoading] = useState(false);
+  const [commentPostLoading, setCommnetPostLoading] = useState(false);
+  const [commentDeleteLoading, setCommnetDeleteLoading] = useState(false);
   const [decodedToken, setDecodedToken] = useState(null);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     fetchTokenAndDecode();
   }, []);
 
-  const fetchPost = async () => {
+  const fetchPost = useCallback(async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}`
@@ -44,9 +46,9 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [params.uuid]); // 여기에 의존성을 추가합니다.
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/comments`
@@ -56,7 +58,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [params.uuid]); // 여기에 의존성을 추가합니다.
 
   const submitComment = async (event) => {
     event.preventDefault();
@@ -66,14 +68,14 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
       return alert("댓글을 입력해주세요.");
     }
 
-    setIsLoading(true);
+    setCommnetPostLoading(true);
 
     const newComment = { content };
     newComment["postId"] = params.uuid;
 
     try {
       const accessToken = await getAccessTokenAndValidate();
-      
+
       setComment("");
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/`, {
         method: "POST",
@@ -83,7 +85,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         },
         body: JSON.stringify(newComment),
       });
-      setIsLoading(false);
+      setCommnetPostLoading(false);
       await fetchComments();
     } catch (error) {
       console.error(error);
@@ -91,9 +93,10 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   };
 
   const handlePostDelete = async (id) => {
+    setPostDeleteLoading(true);
     try {
       const accessToken = await getAccessTokenAndValidate();
-      
+
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/${id}`, {
         method: "DELETE",
         headers: {
@@ -101,6 +104,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      setPostDeleteLoading(false);
       router.push("/posts");
     } catch (error) {
       console.error(error);
@@ -108,9 +112,10 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   };
 
   const handleCommentDelete = async (id) => {
+    setCommnetDeleteLoading(true);
     try {
       const accessToken = await getAccessTokenAndValidate();
-      
+
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/${id}`, {
         method: "DELETE",
         headers: {
@@ -118,6 +123,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      setCommnetDeleteLoading(false);
       await fetchComments();
     } catch (error) {
       console.error(error);
@@ -127,7 +133,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   useEffect(() => {
     fetchPost();
     fetchComments();
-  }, []);
+  }, [fetchComments, fetchPost]);
 
   return (
     <>
@@ -138,7 +144,8 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         comment={comment}
         setComment={setComment}
         handleDelete={handlePostDelete}
-        disabled={isLoading}
+        commentPostLoading={commentPostLoading}
+        postDeleteLoading={postDeleteLoading}
         decodedToken={decodedToken}
       />
       {commnets.map((comment) => (
@@ -147,6 +154,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
           comment={comment}
           handleCommentDelete={handleCommentDelete}
           decodedToken={decodedToken}
+          commentDeleteLoading={commentDeleteLoading}
         />
       ))}
     </>

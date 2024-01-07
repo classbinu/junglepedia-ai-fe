@@ -13,13 +13,16 @@ export default function InterviewPage() {
 
   const [topic, setTopic] = useState("");
   const [answer, setAnswer] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [topicLoading, setTopicLoading] = useState(false);
+  const [answerPostLoading, setAnswerPostLoading] = useState(false);
 
   const selectTopic = () => {
     setTopic("");
+    setTopicLoading(true);
     setTimeout(() => {
       const pickedTopic = topics[Math.floor(Math.random() * topics.length)];
       setTopic(pickedTopic);
+      setTopicLoading(false);
     }, 2000);
   };
 
@@ -31,7 +34,7 @@ export default function InterviewPage() {
       return alert("답변을 입력해주세요.");
     }
 
-    setIsLoading(true);
+    setAnswerPostLoading(true);
     showAdModal();
 
     const newAnswer = { content };
@@ -48,6 +51,7 @@ export default function InterviewPage() {
         },
         body: JSON.stringify(newAnswer),
       });
+      setAnswerPostLoading(false);
       const data = await res.json();
       if (data.id) {
         Swal.close();
@@ -111,7 +115,7 @@ export default function InterviewPage() {
       <div className="flex justify-center mt-10">
         <button
           className="btn btn-outline btn-primary"
-          disabled={isLoading}
+          disabled={topicLoading}
           onClick={selectTopic}
         >
           다른 문제
@@ -122,6 +126,7 @@ export default function InterviewPage() {
         onSubmit={onSubmit}
         answer={answer}
         setAnswer={setAnswer}
+        answerPostLoading={answerPostLoading}
       />
     </>
   );
