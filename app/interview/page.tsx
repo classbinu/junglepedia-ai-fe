@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { InterviewForm } from "@/components/interview/interviewForm";
 import Swal from "sweetalert2";
+import { getAccessTokenAndValidate } from "@/lib/utils";
 import topics from "@/data/topics";
 import { useRouter } from "next/navigation";
 
@@ -37,11 +38,13 @@ export default function InterviewPage() {
     newAnswer["title"] = topic;
 
     try {
+      const accessToken = await getAccessTokenAndValidate();
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(newAnswer),
       });

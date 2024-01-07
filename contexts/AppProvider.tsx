@@ -21,6 +21,16 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
+  const clearAllData = () => {
+    setOffset(0);
+    setPosts([]);
+    setAllDataLoaded(false);
+
+    setMyOffset(0);
+    setMyPosts([]);
+    setMyAllDataLoaded(false);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -39,6 +49,8 @@ export const AppProvider = ({ children }) => {
         setMyPosts,
         myAllDataLoaded,
         setMyAllDataLoaded,
+
+        clearAllData,
       }}
     >
       {children}

@@ -1,10 +1,10 @@
 "use client";
 
+import { decodeToken, getAccessTokenAndValidate } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 import { CommentListCard } from "@/components/comment/commentListCard";
 import { PostDetailCard } from "@/components/post/postDetailCard";
-import { decodeJWT } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 export default function PostPage({ params }: { params: { uuid: string } }) {
@@ -20,18 +20,18 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   const [commnets, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [decodedToken, setDecodedToken] = useState({
-    sub: "",
-    email: "",
-    iat: 0,
-    exp: 0,
-  });
+  const [decodedToken, setDecodedToken] = useState(null);
 
   useEffect(() => {
-    const tokenData = decodeJWT();
-    setDecodedToken(
-      tokenData as { sub: string; email: string; iat: number; exp: number }
-    );
+    const fetchTokenAndDecode = async () => {
+      const accessToken = await getAccessTokenAndValidate();
+      if (accessToken) {
+        const tokenData = decodeToken(accessToken);
+        setDecodedToken(tokenData);
+      }
+    };
+
+    fetchTokenAndDecode();
   }, []);
 
   const fetchPost = async () => {
@@ -72,12 +72,14 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     newComment["postId"] = params.uuid;
 
     try {
+      const accessToken = await getAccessTokenAndValidate();
+      
       setComment("");
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(newComment),
       });
@@ -90,11 +92,13 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
   const handlePostDelete = async (id) => {
     try {
+      const accessToken = await getAccessTokenAndValidate();
+      
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       router.push("/posts");
@@ -105,11 +109,13 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
   const handleCommentDelete = async (id) => {
     try {
+      const accessToken = await getAccessTokenAndValidate();
+      
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       await fetchComments();

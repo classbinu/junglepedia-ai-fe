@@ -4,6 +4,8 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { AppContext } from "@/contexts/AppContext";
 import { PostListCard } from "@/components/post/postListCard";
+import { get } from "http";
+import { getAccessTokenAndValidate } from "@/lib/utils";
 
 export default function PostListPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,17 +25,17 @@ export default function PostListPage() {
     }
     setIsLoading(true);
     try {
+      const accessToken = await getAccessTokenAndValidate();
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/posts/my?offset=${myOffset}&limit=${limit}`,
         {
           headers: {
-            Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
       const newPosts = await response.json();
-
-      console.log(newPosts);
 
       if (newPosts.length < limit) {
         setMyAllDataLoaded(true);

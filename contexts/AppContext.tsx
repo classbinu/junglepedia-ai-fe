@@ -18,6 +18,8 @@ interface AppContextType {
   setMyPosts: Function;
   myAllDataLoaded: boolean;
   setMyAllDataLoaded: Function;
+
+  clearAllData: Function;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -36,4 +38,6 @@ export const AppContext = createContext<AppContextType>({
   setMyPosts: () => {},
   myAllDataLoaded: false,
   setMyAllDataLoaded: () => {},
+
+  clearAllData: () => {},
 });
