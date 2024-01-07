@@ -1,5 +1,6 @@
 import Avatar from "../ui/avatar/avatar";
 import { CommentInput } from "../comment/commentInput";
+import Link from "next/link";
 
 export function PostDetailCard({
   id,
@@ -27,15 +28,18 @@ export function PostDetailCard({
         <h2 className="card-title font-bold text-4xl">{post.title}</h2>
         <div className="divider"></div>
         <p>{post.content}</p>
-        <div className="text-right">
+        <div
+          className={`text-right ${
+            decodedToken && decodedToken.sub === post.author.id ? "" : "hidden"
+          }`}
+        >
+          <Link href={`/posts/${id}/edit`} className={`btn btn-xs btn-warning mr-2`}>
+            수정
+          </Link>
           <button
             onClick={() => handleDelete(id)}
             disabled={postDeleteLoading}
-            className={`btn btn-xs btn-error ${
-              decodedToken && decodedToken.sub === post.author.id
-                ? ""
-                : "hidden"
-            }`}
+            className={`btn btn-xs btn-error `}
           >
             삭제
           </button>
