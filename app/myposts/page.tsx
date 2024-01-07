@@ -1,20 +1,30 @@
 "use client";
 
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { use, useCallback, useContext, useEffect, useState } from "react";
 
 import { AppContext } from "@/contexts/AppContext";
 import { PostListCard } from "@/components/post/postListCard";
 import { get } from "http";
 import { getAccessTokenAndValidate } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function PostListPage() {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const limit = 20;
+
+  const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
   const { myOffset, setMyOffset } = useContext(AppContext);
   const { myPosts, setMyPosts } = useContext(AppContext);
   const { myAllDataLoaded, setMyAllDataLoaded } = useContext(AppContext);
 
   const fetchPosts = useCallback(async () => {
+    if (!isLoggedIn) {
+      router.push("/login");
+      return;
+    }
+
     if (myPosts.length > 0 && myPosts.length > myOffset) {
       return; // 이미 충분한 게시글이 로드되었으므로 fetch하지 않습니다.
     }
@@ -76,7 +86,7 @@ export default function PostListPage() {
 
   useEffect(() => {
     fetchPosts();
-  }, [fetchPosts, myOffset, setMyPosts]);
+  }, [fetchPosts]);
 
   return (
     <>
