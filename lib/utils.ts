@@ -34,7 +34,7 @@ export const getAccessTokenAndValidate = async (): Promise<string | null> => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_API}/auth/refresh`,
         {
-          method: "GET", // POST 요청으로 수정 검토
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${refreshToken}`,
