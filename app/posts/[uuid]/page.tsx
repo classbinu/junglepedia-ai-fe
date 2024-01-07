@@ -14,7 +14,12 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     id: "",
     title: "Loading...",
     content: "Loading...",
-    author: {},
+    author: {
+      id: "",
+      nickname: "Loading...",
+      avatar: "",
+      type: 1,
+    },
   });
 
   const [commnets, setComments] = useState([]);
@@ -75,8 +80,6 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
     try {
       const accessToken = await getAccessTokenAndValidate();
-
-      setComment("");
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/`, {
         method: "POST",
         headers: {
@@ -85,6 +88,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         },
         body: JSON.stringify(newComment),
       });
+      setComment("");
       setCommnetPostLoading(false);
       await fetchComments();
     } catch (error) {

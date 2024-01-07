@@ -27,8 +27,13 @@ export default function LoginPage() {
       const { accessToken, refreshToken } = data;
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
-      setIsLoggedIn(true);
-      router.push("/");
+
+      if (res.ok) {
+        setIsLoggedIn(true);
+        router.push("/");
+      } else {
+        alert(data.message);
+      }
     } catch (error) {
       console.error(error);
     }
