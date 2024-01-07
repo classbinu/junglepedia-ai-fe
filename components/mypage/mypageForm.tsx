@@ -6,6 +6,23 @@ export function MypageForm({ onSubmit, user, setUser }) {
       <form onSubmit={onSubmit} className="card-body">
         <div className="form-control">
           <label className="label">
+            <span className="label-text">이메일</span>
+          </label>
+          <input
+            type="text"
+            value={user?.email || ""}
+            className="input input-bordered"
+            readOnly
+            disabled
+          />
+          <div className="label">
+            <span className="label-text-alt text-warning">
+              이메일은 변경할 수 없어요
+            </span>
+          </div>
+        </div>
+        <div className="form-control">
+          <label className="label">
             <span className="label-text">닉네임</span>
           </label>
           <input
@@ -18,19 +35,19 @@ export function MypageForm({ onSubmit, user, setUser }) {
             onChange={(e) => setUser({ ...user, nickname: e.target.value })}
             required
           />
-          <label className="label">
-            <Link
-              href="/password/change"
-              className="label-text-alt link link-hover"
-            >
-              비밀번호 변경
-            </Link>
-          </label>
         </div>
         <div className="form-control mt-6">
           <button className="btn btn-primary">저장</button>
         </div>
       </form>
+      <div className="text-center mb-6">
+        <Link
+          href="/password/change"
+          className="text-sm text-primary hover:underline"
+        >
+          비밀번호 변경
+        </Link>
+      </div>
     </div>
   );
 }
