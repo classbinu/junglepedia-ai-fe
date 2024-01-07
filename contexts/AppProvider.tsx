@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
 
 export const AppProvider = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [offset, setOffset] = useState(0);
   const [posts, setPosts] = useState([]);
@@ -15,10 +17,17 @@ export const AppProvider = ({ children }) => {
   const [myAllDataLoaded, setMyAllDataLoaded] = useState(false);
 
   useEffect(() => {
-    const accessToken = sessionStorage.getItem("accessToken");
-    if (accessToken) {
-      setIsLoggedIn(true);
-    }
+    setIsLoading(true);
+
+    const checkAuth = async () => {
+      const accessToken = sessionStorage.getItem("accessToken");
+      if (accessToken) {
+        setIsLoggedIn(true);
+      }
+    };
+    checkAuth();
+
+    setIsLoading(false);
   }, []);
 
   const clearAllData = () => {
@@ -34,6 +43,9 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
+        isLoading,
+        setIsLoading,
+
         isLoggedIn,
         setIsLoggedIn,
         offset,

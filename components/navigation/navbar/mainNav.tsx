@@ -32,14 +32,34 @@ export function MainNav() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <Link href="/interview" className="py-4">모의면접</Link>
+              <Link href="/interview" className="py-4">
+                모의면접
+              </Link>
             </li>
             <li>
-              <Link href="/myposts" className="py-4">내 답변</Link>
+              <Link href="/myposts" className="py-4">
+                내 답변
+              </Link>
             </li>
             <li>
-              <Link href="/posts" className="py-4">모든 답변</Link>
+              <Link href="/posts" className="py-4">
+                모든 답변
+              </Link>
             </li>
+            {isLoggedIn ? (
+              <>
+                <li>
+                  <Link href="/mypage" className="py-4">마이페이지</Link>
+                </li>
+                <li>
+                  <Link href="/logout" className="py-4">로그아웃</Link>
+                </li>
+              </>
+            ) : (
+              <li>
+                <Link href="/login" className="py-4">로그인</Link>
+              </li>
+            )}
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-xl text-primary">
@@ -60,11 +80,22 @@ export function MainNav() {
         </ul>
       </div>
       <div className="navbar-end">
-        {isLoggedIn ? (
-          <Link href="/logout">로그아웃</Link>
-        ) : (
-          <Link href="/login">로그인</Link>
-        )}
+        <ul className="menu menu-horizontal px-1">
+          {isLoggedIn ? (
+            <>
+              <li>
+                <Link href="/mypage">마이페이지</Link>
+              </li>
+              <li>
+                <Link href="/logout">로그아웃</Link>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link href="/login">로그인</Link>
+            </li>
+          )}
+        </ul>
       </div>
     </div>
   );

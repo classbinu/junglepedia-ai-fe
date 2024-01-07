@@ -3,6 +3,9 @@
 import { createContext } from "react";
 
 interface AppContextType {
+  isLoading: boolean;
+  setIsLoading: Function;
+
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
   offset: number;
@@ -23,6 +26,9 @@ interface AppContextType {
 }
 
 export const AppContext = createContext<AppContextType>({
+  isLoading: false,
+  setIsLoading: () => {},
+
   isLoggedIn: false,
   setIsLoggedIn: () => {},
   offset: 0,

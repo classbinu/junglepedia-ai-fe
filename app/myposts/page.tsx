@@ -1,17 +1,17 @@
 "use client";
 
-import { use, useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import { AppContext } from "@/contexts/AppContext";
 import { PostListCard } from "@/components/post/postListCard";
-import { get } from "http";
 import { getAccessTokenAndValidate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 export default function PostListPage() {
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading } = useContext(AppContext);
+  const [isFetchingPost, setIsFetchingPost] = useState(false);
   const limit = 20;
 
   const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
@@ -20,7 +20,7 @@ export default function PostListPage() {
   const { myAllDataLoaded, setMyAllDataLoaded } = useContext(AppContext);
 
   const fetchPosts = useCallback(async () => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !isLoading) {
       router.push("/login");
       return;
     }
@@ -33,7 +33,7 @@ export default function PostListPage() {
       console.log("already loading");
       return;
     }
-    setIsLoading(true);
+    setIsFetchingPost(true);
     try {
       const accessToken = await getAccessTokenAndValidate();
 
@@ -61,9 +61,17 @@ export default function PostListPage() {
     } catch (error) {
       console.error(error);
     } finally {
-      setIsLoading(false);
+      setIsFetchingPost(false);
     }
-  }, [myPosts.length, myOffset, isLoading, setMyPosts, setMyAllDataLoaded]);
+  }, [
+    isLoggedIn,
+    myPosts.length,
+    myOffset,
+    isLoading,
+    router,
+    setMyPosts,
+    setMyAllDataLoaded,
+  ]);
 
   useEffect(() => {
     let debounceTimer: NodeJS.Timeout;
