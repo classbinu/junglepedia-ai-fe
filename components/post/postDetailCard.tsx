@@ -23,6 +23,7 @@ export function PostDetailCard({
       />
 
       <div className="card-body">
+        {post.isPrivate ? <div className="badge badge-accent">비공개</div> : ""}
         <h2 className="card-title font-bold text-4xl">{post.title}</h2>
         <div className="divider"></div>
         <p>{post.content}</p>

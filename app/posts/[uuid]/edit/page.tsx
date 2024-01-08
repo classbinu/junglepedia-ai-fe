@@ -113,7 +113,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
       />
       <div className="label">
         <span className="label-text-alt text-primary">
-          * 답변을 수정해도 AI 답변은 변경되지 않습니다.
+          * 답변을 수정해도 AI 댓글은 변경되지 않습니다.
         </span>
       </div>
       <div className="text-center">

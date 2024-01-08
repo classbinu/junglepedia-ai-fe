@@ -99,12 +99,7 @@ export default function PostListPage() {
   return (
     <>
       {myPosts.map((post) => (
-        <PostListCard
-          key={post.id}
-          id={post.id}
-          title={post.title}
-          content={post.content}
-        />
+        <PostListCard key={post.id} post={post} />
       ))}
     </>
   );

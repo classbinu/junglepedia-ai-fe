@@ -14,9 +14,9 @@ export function InterviewForm({
   const maxAnswerLength = 1000;
   return (
     <form onSubmit={onSubmit}>
-      <div className="flex justify-end">
+      <div className="flex justify-start">
         <div className="form-control w-20">
-          <label className="label cursor-pointer">
+          <label className="label cursor-pointer mb-4">
             <span className="label-text">비공개</span>
             <input
               type="checkbox"

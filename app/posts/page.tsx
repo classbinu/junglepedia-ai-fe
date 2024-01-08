@@ -74,9 +74,7 @@ export default function PostListPage() {
       {posts.map((post) => (
         <PostListCard
           key={post.id}
-          id={post.id}
-          title={post.title}
-          content={post.content}
+          post={post}
         />
       ))}
     </>
