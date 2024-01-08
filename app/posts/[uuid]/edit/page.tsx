@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
+import { AppContext } from "@/contexts/AppContext";
 import { InterviewForm } from "@/components/interview/interviewForm";
 import Swal from "sweetalert2";
 import { getAccessTokenAndValidate } from "@/lib/utils";
@@ -14,6 +15,11 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
   const [answer, setAnswer] = useState("");
   const [answerPostLoading, setAnswerPostLoading] = useState(false);
   const [postDeleteLoading, setPostDeleteLoading] = useState(false);
+
+  const { offset, setOffset } = useContext(AppContext);
+  const { posts, setPosts } = useContext(AppContext);
+  const { myPosts, setMyPosts } = useContext(AppContext);
+  const { myOffset, setMyOffset } = useContext(AppContext);
 
   const fetchPost = async (uuid: string) => {
     try {
@@ -90,6 +96,12 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
         },
       });
       setPostDeleteLoading(false);
+
+      setOffset(0);
+      setPosts([]);
+      setMyOffset(0);
+      setMyPosts([]);
+
       route.push("/posts");
     } catch (error) {
       console.error(error);
