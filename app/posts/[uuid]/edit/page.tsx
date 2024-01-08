@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 export default function EditPostPage({ params }: { params: { uuid: string } }) {
   const route = useRouter();
 
+  const [isPrivate, setIsPrivate] = useState(false);
   const [answer, setAnswer] = useState("");
   const [answerPostLoading, setAnswerPostLoading] = useState(false);
   const [postDeleteLoading, setPostDeleteLoading] = useState(false);
@@ -21,6 +22,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
       );
       const post = await response.json();
       setAnswer(post.content);
+      setIsPrivate(post.isPrivate);
     } catch (error) {
       console.error(error);
     }
@@ -36,7 +38,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
 
     setAnswerPostLoading(true);
 
-    const newAnswer = { content };
+    const newAnswer = { content, isPrivate };
 
     try {
       const accessToken = await getAccessTokenAndValidate();
@@ -102,6 +104,8 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
     <div className="mt-20">
       <InterviewForm
         onSubmit={onSubmit}
+        isPrivate={isPrivate}
+        setIsPrivate={setIsPrivate}
         answer={answer}
         setAnswer={setAnswer}
         answerPostLoading={answerPostLoading}

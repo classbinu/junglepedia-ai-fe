@@ -3,6 +3,8 @@ import { useContext } from "react";
 
 export function InterviewForm({
   onSubmit,
+  isPrivate,
+  setIsPrivate,
   answer,
   setAnswer,
   answerPostLoading,
@@ -12,6 +14,19 @@ export function InterviewForm({
   const maxAnswerLength = 1000;
   return (
     <form onSubmit={onSubmit}>
+      <div className="flex justify-end">
+        <div className="form-control w-20">
+          <label className="label cursor-pointer">
+            <span className="label-text">비공개</span>
+            <input
+              type="checkbox"
+              checked={isPrivate}
+              className="checkbox checkbox-primary"
+              onChange={(e) => setIsPrivate(e.target.checked)}
+            />
+          </label>
+        </div>
+      </div>
       <div className="form-control">
         <textarea
           name="answer"

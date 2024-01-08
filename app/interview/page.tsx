@@ -12,6 +12,7 @@ export default function InterviewPage() {
   const route = useRouter();
 
   const [topic, setTopic] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
   const [answer, setAnswer] = useState("");
   const [topicLoading, setTopicLoading] = useState(false);
   const [answerPostLoading, setAnswerPostLoading] = useState(false);
@@ -37,7 +38,7 @@ export default function InterviewPage() {
     setAnswerPostLoading(true);
     showAdModal();
 
-    const newAnswer = { content };
+    const newAnswer = { content, isPrivate };
     newAnswer["title"] = topic;
 
     try {
@@ -124,10 +125,12 @@ export default function InterviewPage() {
       <div className="divider"></div>
       <InterviewForm
         onSubmit={onSubmit}
+        isPrivate={isPrivate}
+        setIsPrivate={setIsPrivate}
         answer={answer}
         setAnswer={setAnswer}
         answerPostLoading={answerPostLoading}
-        buttonMessage="답변 제출"
+        buttonText="답변 제출"
       />
     </>
   );
