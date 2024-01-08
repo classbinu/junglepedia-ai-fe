@@ -24,9 +24,8 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
   const [commnets, setComments] = useState([]);
   const [comment, setComment] = useState("");
-  const [postDeleteLoading, setPostDeleteLoading] = useState(false);
+
   const [commentPostLoading, setCommnetPostLoading] = useState(false);
-  const [commentDeleteLoading, setCommnetDeleteLoading] = useState(false);
   const [decodedToken, setDecodedToken] = useState(null);
 
   useEffect(() => {
@@ -96,44 +95,6 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     }
   };
 
-  const handlePostDelete = async (id) => {
-    setPostDeleteLoading(true);
-    try {
-      const accessToken = await getAccessTokenAndValidate();
-
-      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setPostDeleteLoading(false);
-      router.push("/posts");
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleCommentDelete = async (id) => {
-    setCommnetDeleteLoading(true);
-    try {
-      const accessToken = await getAccessTokenAndValidate();
-
-      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setCommnetDeleteLoading(false);
-      await fetchComments();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     fetchPost();
     fetchComments();
@@ -147,18 +108,15 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         onSubmit={submitComment}
         comment={comment}
         setComment={setComment}
-        handleDelete={handlePostDelete}
         commentPostLoading={commentPostLoading}
-        postDeleteLoading={postDeleteLoading}
         decodedToken={decodedToken}
       />
       {commnets.map((comment) => (
         <CommentListCard
           key={comment.id}
+          uuid={comment.id}
           comment={comment}
-          handleCommentDelete={handleCommentDelete}
           decodedToken={decodedToken}
-          commentDeleteLoading={commentDeleteLoading}
         />
       ))}
     </>

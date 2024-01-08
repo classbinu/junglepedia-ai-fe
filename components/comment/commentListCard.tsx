@@ -1,11 +1,7 @@
 import Avatar from "../ui/avatar/avatar";
+import Link from "next/link";
 
-export function CommentListCard({
-  comment,
-  handleCommentDelete,
-  commentDeleteLoading,
-  decodedToken,
-}) {
+export function CommentListCard({ uuid, comment, decodedToken }) {
   return (
     <div className="card w-full bg-base-100 shadow-xl m-2">
       <Avatar
@@ -19,18 +15,19 @@ export function CommentListCard({
 
       <div className="card-body py-6">
         <p>{comment.content}</p>
-        <div className="text-right">
-          <button
-            onClick={() => handleCommentDelete(comment.id)}
-            disabled={commentDeleteLoading}
-            className={`btn btn-xs btn-error ${
-              decodedToken && decodedToken.sub === comment.author.id
-                ? ""
-                : "hidden"
-            }`}
+        <div
+          className={`text-right ${
+            decodedToken && decodedToken.sub === comment.author.id
+              ? ""
+              : "hidden"
+          }`}
+        >
+          <Link
+            href={`/comments/${uuid}/edit`}
+            className={`btn btn-xs btn-warning mr-2`}
           >
-            삭제
-          </button>
+            수정
+          </Link>
         </div>
       </div>
       <div></div>

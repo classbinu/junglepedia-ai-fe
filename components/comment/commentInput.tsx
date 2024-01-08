@@ -1,7 +1,7 @@
 import { AppContext } from "@/contexts/AppContext";
 import { useContext } from "react";
 
-export function CommentInput({ onSubmit, comment, setComment, disabled }) {
+export function CommentInput({ onSubmit, comment, setComment, disabled, buttonText }) {
   const isLoggedIn = useContext(AppContext).isLoggedIn;
   return (
     <form onSubmit={onSubmit}>
@@ -20,7 +20,7 @@ export function CommentInput({ onSubmit, comment, setComment, disabled }) {
       <div className="form-control mt-2">
         <input
           type="submit"
-          value={isLoggedIn ? "댓글 작성" : "로그인이 필요합니다."}
+          value={isLoggedIn ? buttonText : "로그인이 필요합니다."}
           className="btn btn-primary"
           disabled={disabled || !isLoggedIn}
         />

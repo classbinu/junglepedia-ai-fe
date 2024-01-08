@@ -127,6 +127,7 @@ export default function InterviewPage() {
         answer={answer}
         setAnswer={setAnswer}
         answerPostLoading={answerPostLoading}
+        buttonMessage="답변 제출"
       />
     </>
   );

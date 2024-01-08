@@ -8,8 +8,6 @@ export function PostDetailCard({
   onSubmit,
   comment,
   setComment,
-  handleDelete,
-  postDeleteLoading,
   commentPostLoading,
   decodedToken,
 }) {
@@ -33,17 +31,12 @@ export function PostDetailCard({
             decodedToken && decodedToken.sub === post.author.id ? "" : "hidden"
           }`}
         >
-          <Link href={`/posts/${id}/edit`} className={`btn btn-xs btn-warning mr-2`}>
+          <Link
+            href={`/posts/${id}/edit`}
+            className={`btn btn-xs btn-warning mr-2`}
+          >
             수정
           </Link>
-          <button
-            onClick={() => handleDelete(id)}
-            disabled={postDeleteLoading}
-            className={`btn btn-xs btn-error `}
-          >
-            삭제
-          </button>
-
           <div className="divider"></div>
         </div>
         {/* <Link href="/posts" className="btn btn-primary w-36">목록으로 돌아가기</Link> */}
@@ -52,6 +45,7 @@ export function PostDetailCard({
           comment={comment}
           setComment={setComment}
           disabled={commentPostLoading}
+          buttonText="댓글 작성"
         />
       </div>
     </div>

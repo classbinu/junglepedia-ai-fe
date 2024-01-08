@@ -6,6 +6,7 @@ export function InterviewForm({
   answer,
   setAnswer,
   answerPostLoading,
+  buttonText,
 }) {
   const isLoggedIn = useContext(AppContext).isLoggedIn;
   const maxAnswerLength = 1000;
@@ -34,7 +35,7 @@ export function InterviewForm({
       <div className="form-control mt-2">
         <input
           type="submit"
-          value={isLoggedIn ? "답변 제출" : "로그인이 필요합니다."}
+          value={isLoggedIn ? buttonText : "로그인이 필요합니다."}
           className="btn btn-primary"
           disabled={!isLoggedIn || answerPostLoading}
         />
