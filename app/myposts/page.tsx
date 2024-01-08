@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 export default function PostListPage() {
   const router = useRouter();
 
-  const { isLoading } = useContext(AppContext);
+  const { isLoading, setIsLoading } = useContext(AppContext);
   const [isFetchingPost, setIsFetchingPost] = useState(false);
   const limit = 20;
 
@@ -20,16 +20,11 @@ export default function PostListPage() {
   const { myAllDataLoaded, setMyAllDataLoaded } = useContext(AppContext);
 
   const fetchPosts = useCallback(async () => {
-    if (!isLoggedIn && !isLoading) {
-      router.push("/login");
-      return;
-    }
-
     if (myPosts.length > 0 && myPosts.length > myOffset) {
       return; // 이미 충분한 게시글이 로드되었으므로 fetch하지 않습니다.
     }
 
-    if (isLoading) {
+    if (isFetchingPost) {
       console.log("already loading");
       return;
     }
@@ -64,11 +59,9 @@ export default function PostListPage() {
       setIsFetchingPost(false);
     }
   }, [
-    isLoggedIn,
     myPosts.length,
     myOffset,
-    isLoading,
-    router,
+    isFetchingPost,
     setMyPosts,
     setMyAllDataLoaded,
   ]);
@@ -93,8 +86,12 @@ export default function PostListPage() {
   }, [myAllDataLoaded, setMyOffset]);
 
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
+    if (isLoggedIn) {
+      fetchPosts();
+    } else if (isLoggedIn === false) {
+      router.push("/login");
+    }
+  }, [fetchPosts, isLoggedIn, router]);
 
   return (
     <>

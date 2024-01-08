@@ -14,14 +14,13 @@ export default function MypagePage() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
   const [user, setUser] = useState(null);
 
-  const handleSignup = async (event) => {
+  const handleMypage = async (event) => {
     event.preventDefault();
-    let nickname = user.nickname;
     try {
       await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/users/${user.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nickname }),
+        body: JSON.stringify(user),
       });
       router.push("/");
     } catch (error) {
@@ -29,38 +28,38 @@ export default function MypagePage() {
     }
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const accessToken = await getAccessTokenAndValidate();
-        const decodedToken = decodeToken(accessToken);
+  const fetchUser = async () => {
+    try {
+      const accessToken = await getAccessTokenAndValidate();
+      const decodedToken = decodeToken(accessToken);
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_API}/users/${decodedToken.sub}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const user = await response.json();
-        setUser(user);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (!isLoggedIn && !isLoading) {
-      router.push("/login");
-      return;
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/users/${decodedToken.sub}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const user = await response.json();
+      setUser(user);
+    } catch (error) {
+      console.error(error);
     }
-    fetchUser();
-  }, [isLoading, isLoggedIn, router, setUser]);
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchUser();
+    } else if (isLoggedIn === false) {
+      router.push("/login");
+    }
+  }, [isLoggedIn, router]);
 
   return (
     <div className="flex justify-center items-center h-screen">
       <MypageForm
-        onSubmit={handleSignup}
+        onSubmit={handleMypage}
         user={user}
         setUser={setUser}
       ></MypageForm>

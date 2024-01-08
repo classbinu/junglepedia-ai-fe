@@ -22,7 +22,7 @@ export function MypageForm({ onSubmit, user, setUser }) {
           </div>
         </div>
         <div className="form-control">
-          <label className="label">
+          <label className="label" htmlFor="nickname">
             <span className="label-text">닉네임</span>
           </label>
           <input
@@ -30,10 +30,34 @@ export function MypageForm({ onSubmit, user, setUser }) {
             id="nickname"
             placeholder="10자 이내로 닉네임을 입력해 주세요."
             value={user?.nickname || ""}
-            className="input input-bordered"
+            className="input input-primary input-bordered"
             maxLength={10}
             onChange={(e) => setUser({ ...user, nickname: e.target.value })}
             required
+          />
+        </div>
+        <div className="form-control">
+          <label className="label" htmlFor="intro">
+            <span className="label-text">인삿말</span>
+          </label>
+          <textarea
+            id="intro"
+            placeholder="간단한 인삿말을 적어 주세요."
+            value={user?.intro || ""}
+            className="textarea textarea-primary"
+            maxLength={80}
+            onChange={(e) => setUser({ ...user, intro: e.target.value })}
+            rows={4}
+          />
+        </div>
+        <div className="form-control">
+          <label className="label" htmlFor="avatar">
+            <span className="label-text">프로필 사진</span>
+          </label>
+          <input
+            id="avatar"
+            type="file"
+            className="file-input file-input-bordered file-input-primary w-full max-w-xs"
           />
         </div>
         <div className="form-control mt-6">

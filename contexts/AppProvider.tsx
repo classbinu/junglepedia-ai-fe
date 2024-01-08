@@ -5,9 +5,9 @@ import React, { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
 
 export const AppProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [offset, setOffset] = useState(0);
   const [posts, setPosts] = useState([]);
   const [allDataLoaded, setAllDataLoaded] = useState(false);
@@ -16,13 +16,20 @@ export const AppProvider = ({ children }) => {
   const [myPosts, setMyPosts] = useState([]);
   const [myAllDataLoaded, setMyAllDataLoaded] = useState(false);
 
+  const [profile, setProfile] = useState(null);
+  const [profileOffset, setProfileOffset] = useState(0);
+  const [profilePosts, setProfilePosts] = useState([]);
+  const [profileAllDataLoaded, setProfileAllDataLoaded] = useState(false);
+
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(false);
 
     const checkAuth = async () => {
       const accessToken = sessionStorage.getItem("accessToken");
       if (accessToken) {
         setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
       }
     };
     checkAuth();
@@ -38,6 +45,11 @@ export const AppProvider = ({ children }) => {
     setMyOffset(0);
     setMyPosts([]);
     setMyAllDataLoaded(false);
+
+    setProfile(null);
+    setProfileOffset(0);
+    setProfilePosts([]);
+    setProfileAllDataLoaded(false);
   };
 
   return (
@@ -61,6 +73,15 @@ export const AppProvider = ({ children }) => {
         setMyPosts,
         myAllDataLoaded,
         setMyAllDataLoaded,
+
+        profile,
+        setProfile,
+        profileOffset,
+        setProfileOffset,
+        profilePosts,
+        setProfilePosts,
+        profileAllDataLoaded,
+        setProfileAllDataLoaded,
 
         clearAllData,
       }}

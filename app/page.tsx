@@ -22,7 +22,7 @@ export default function Home() {
         className="text-3xl text-primary animate__animated animate__fadeInUp"
         style={{ animationDelay: "1s" }}
       >
-        {`답변을 제출하면 AI 피드백을 받을 수 있어요`}
+        {`AI 튜터에게 피드백을 받아 보세요`}
       </p>
     </main>
   );

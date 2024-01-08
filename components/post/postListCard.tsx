@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function PostListCard({ post }) {
+export function PostListCard({  post }) {
   const truncateText = (text: string, limit: number) => {
     if (text.length > limit) {
       return text.substring(0, limit) + "...";

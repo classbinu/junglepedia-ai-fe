@@ -23,6 +23,7 @@ export function InterviewForm({
               checked={isPrivate}
               className="checkbox checkbox-primary"
               onChange={(e) => setIsPrivate(e.target.checked)}
+              disabled={!isLoggedIn}
             />
           </label>
         </div>

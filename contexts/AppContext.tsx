@@ -22,6 +22,15 @@ interface AppContextType {
   myAllDataLoaded: boolean;
   setMyAllDataLoaded: Function;
 
+  profile: string | null;
+  setProfile: Function;
+  profileOffset: number;
+  setProfileOffset: Function;
+  profilePosts: Array<any>;
+  setProfilePosts: Function;
+  profileAllDataLoaded: boolean;
+  setProfileAllDataLoaded: Function;
+
   clearAllData: Function;
 }
 
@@ -44,6 +53,15 @@ export const AppContext = createContext<AppContextType>({
   setMyPosts: () => {},
   myAllDataLoaded: false,
   setMyAllDataLoaded: () => {},
+
+  profile: null,
+  setProfile: () => {},
+  profileOffset: 0,
+  setProfileOffset: () => {},
+  profilePosts: [],
+  setProfilePosts: () => {},
+  profileAllDataLoaded: false,
+  setProfileAllDataLoaded: () => {},
 
   clearAllData: () => {},
 });
