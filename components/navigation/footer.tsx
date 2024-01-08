@@ -9,7 +9,7 @@ export function Footer() {
           target="_blank"
           className="link link-hover"
         >
-          Maker
+          Developer
         </a>
         <a
           href="https://github.com/classbinu/junglepedia-ai-fe"
