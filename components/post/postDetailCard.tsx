@@ -10,6 +10,8 @@ export function PostDetailCard({
   setComment,
   commentPostLoading,
   decodedToken,
+  handleLike,
+  handleDislike,
 }) {
   return (
     <div className="card w-full bg-base-100 shadow-xl m-2 py-10">
@@ -36,6 +38,20 @@ export function PostDetailCard({
             수정
           </Link>
           <div className="divider"></div>
+          <div className="flex justify-center">
+            <button
+              className="btn btn-outline btn-primary mx-1"
+              onClick={handleLike}
+            >
+               👍 좋아요 {post.likesCount} 
+            </button>
+            <button
+              className="btn btn-outline btn-error mx-1"
+              onClick={handleDislike}
+            >
+              👎 싫어요 {post.dislikesCount}
+            </button>
+          </div>
         </div>
         {/* <Link href="/posts" className="btn btn-primary w-36">목록으로 돌아가기</Link> */}
         <CommentInput

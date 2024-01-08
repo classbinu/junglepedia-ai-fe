@@ -95,6 +95,42 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     }
   };
 
+  const handleLike = async () => {
+    try {
+      const accessToken = await getAccessTokenAndValidate();
+      await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/like`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      await fetchPost();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      const accessToken = await getAccessTokenAndValidate();
+      await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/dislike`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      await fetchPost();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchPost();
     fetchComments();
@@ -110,6 +146,8 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
         setComment={setComment}
         commentPostLoading={commentPostLoading}
         decodedToken={decodedToken}
+        handleLike={handleLike}
+        handleDislike={handleDislike}
       />
       {commnets.map((comment) => (
         <CommentListCard
