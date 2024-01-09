@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
+import { AppContext } from "@/contexts/AppContext";
 import { CommentInput } from "@/components/comment/commentInput";
 import Swal from "sweetalert2";
 import { getAccessTokenAndValidate } from "@/lib/utils";
@@ -18,6 +19,8 @@ export default function EditCommentPage({
   const [post, setPost] = useState(null);
   const [commentPatchtLoading, setCommentPatchtLoading] = useState(false);
   const [commentDeleteLoading, setCommnetDeleteLoading] = useState(false);
+
+  const { isLoggedIn } = useContext(AppContext);
 
   const fetchComment = async (uuid: string) => {
     try {
@@ -107,6 +110,7 @@ export default function EditCommentPage({
   return (
     <div className="mt-20">
       <CommentInput
+        isLoggedIn={isLoggedIn}
         onSubmit={onSubmit}
         comment={comment}
         setComment={setComment}

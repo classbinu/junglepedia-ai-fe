@@ -1,8 +1,11 @@
-import { AppContext } from "@/contexts/AppContext";
-import { useContext } from "react";
-
-export function CommentInput({ onSubmit, comment, setComment, disabled, buttonText }) {
-  const isLoggedIn = useContext(AppContext).isLoggedIn;
+export function CommentInput({
+  isLoggedIn,
+  onSubmit,
+  comment,
+  setComment,
+  disabled,
+  buttonText,
+}) {
   return (
     <form onSubmit={onSubmit}>
       <div className="form-control">

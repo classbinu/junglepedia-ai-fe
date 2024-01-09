@@ -1,10 +1,12 @@
 "use client";
 
 import { decodeToken, getAccessTokenAndValidate } from "@/lib/utils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
+import { AppContext } from "@/contexts/AppContext";
 import { CommentListCard } from "@/components/comment/commentListCard";
 import { PostDetailCard } from "@/components/post/postDetailCard";
+import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
 export default function PostPage({ params }: { params: { uuid: string } }) {
@@ -22,11 +24,19 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     },
   });
 
+  const [likes, setLikes] = useState([]);
+  const [dislikes, setDislikes] = useState([]);
+
+  const [pendingLike, setPendingLike] = useState(false);
+  const [pendingDislike, setPendingDislike] = useState(false);
+
   const [commnets, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
   const [commentPostLoading, setCommnetPostLoading] = useState(false);
   const [decodedToken, setDecodedToken] = useState(null);
+
+  const { isLoggedIn } = useContext(AppContext);
 
   useEffect(() => {
     const fetchTokenAndDecode = async () => {
@@ -51,6 +61,24 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
       console.error(error);
     }
   }, [params.uuid]); // 여기에 의존성을 추가합니다.
+
+  const fetchLikesAndDislikes = useCallback(async () => {
+    try {
+      const likes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/likes`
+      );
+      const likesData = await likes.json();
+      setLikes(likesData);
+
+      const dislikes = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/dislikes`
+      );
+      const dislikesData = await dislikes.json();
+      setDislikes(dislikesData);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [params.uuid]);
 
   const fetchComments = useCallback(async () => {
     try {
@@ -96,10 +124,26 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   };
 
   const handleLike = async () => {
+    if (pendingLike) {
+      Swal.fire({
+        icon: "info",
+        title: "'좋아요'를 처리하고 있어요.",
+        text: "잠시 후 다시 시도해 주세요.",
+      });
+      return;
+    }
+    setPendingLike(true);
+
+    if (likes.some((like) => like.user.id === decodedToken.sub)) {
+      setLikes(likes.filter((like) => like.user.id !== decodedToken.sub));
+    } else {
+      setLikes([...likes, { user: { id: decodedToken.sub } }]);
+    }
+
     try {
       const accessToken = await getAccessTokenAndValidate();
       await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/like`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/likes`,
         {
           method: "POST",
           headers: {
@@ -107,17 +151,36 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
           },
         }
       );
-      await fetchPost();
+      await fetchLikesAndDislikes();
     } catch (error) {
       console.error(error);
+    } finally {
+      setPendingLike(false);
     }
   };
 
   const handleDislike = async () => {
+    if (pendingDislike) {
+      Swal.fire({
+        icon: "info",
+        title: "'싫어요'를 처리하고 있어요.",
+        text: "잠시 후 다시 시도해 주세요.",
+      });
+      return;
+    }
+    setPendingDislike(true);
+
+    if (dislikes.some((dislike) => dislike.user.id === decodedToken.sub)) {
+      setDislikes(
+        dislikes.filter((dislike) => dislike.user.id !== decodedToken.sub)
+      );
+    } else {
+      setDislikes([...dislikes, { user: { id: decodedToken.sub } }]);
+    }
     try {
       const accessToken = await getAccessTokenAndValidate();
       await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/dislike`,
+        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}/dislikes`,
         {
           method: "POST",
           headers: {
@@ -125,27 +188,33 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
           },
         }
       );
-      await fetchPost();
+      await fetchLikesAndDislikes();
     } catch (error) {
       console.error(error);
+    } finally {
+      setPendingDislike(false);
     }
   };
 
   useEffect(() => {
     fetchPost();
+    fetchLikesAndDislikes();
     fetchComments();
-  }, [fetchComments, fetchPost]);
+  }, [fetchComments, fetchLikesAndDislikes, fetchPost]);
 
   return (
     <>
       <PostDetailCard
         id={post.id}
+        isLoggedIn={isLoggedIn}
         post={post}
         onSubmit={submitComment}
         comment={comment}
         setComment={setComment}
         commentPostLoading={commentPostLoading}
         decodedToken={decodedToken}
+        likes={likes}
+        dislikes={dislikes}
         handleLike={handleLike}
         handleDislike={handleDislike}
       />

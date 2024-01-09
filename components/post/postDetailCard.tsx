@@ -4,12 +4,15 @@ import Link from "next/link";
 
 export function PostDetailCard({
   id,
+  isLoggedIn,
   post,
   onSubmit,
   comment,
   setComment,
   commentPostLoading,
   decodedToken,
+  likes,
+  dislikes,
   handleLike,
   handleDislike,
 }) {
@@ -26,35 +29,48 @@ export function PostDetailCard({
         <h2 className="card-title font-bold text-4xl">{post.title}</h2>
         <div className="divider"></div>
         <p>{post.content}</p>
-        <div
-          className={`text-right ${
-            decodedToken && decodedToken.sub === post.author.id ? "" : "hidden"
-          }`}
-        >
+        <div className={`text-right`}>
           <Link
             href={`/posts/${id}/edit`}
-            className={`btn btn-xs btn-warning mr-2`}
+            className={`btn btn-xs btn-warning mr-2 ${
+              decodedToken && decodedToken.sub === post.author.id
+                ? ""
+                : "hidden"
+            }`}
           >
             수정
           </Link>
-          <div className="divider"></div>
-          <div className="flex justify-center">
-            <button
-              className="btn btn-outline btn-primary mx-1"
-              onClick={handleLike}
-            >
-               👍 좋아요 {post.likesCount} 
-            </button>
-            <button
-              className="btn btn-outline btn-error mx-1"
-              onClick={handleDislike}
-            >
-              👎 싫어요 {post.dislikesCount}
-            </button>
-          </div>
+        </div>
+
+        <div className="divider"></div>
+
+        <div className="flex justify-center mb-6">
+          <button
+            className={`btn ${
+              likes.some((like: any) => like.user.id === decodedToken.sub)
+                ? ""
+                : "btn-outline"
+            } btn-primary mx-1`}
+            onClick={handleLike}
+            disabled={!isLoggedIn}
+          >
+            👍 좋아요 {likes.length}
+          </button>
+          <button
+            className={`btn ${
+              dislikes.some((dislikes: any) => dislikes.user.id === decodedToken.sub)
+                ? ""
+                : "btn-outline"
+            } btn-error mx-1`}
+            onClick={handleDislike}
+            disabled={!isLoggedIn}
+          >
+            👎 싫어요 {dislikes.length}
+          </button>
         </div>
         {/* <Link href="/posts" className="btn btn-primary w-36">목록으로 돌아가기</Link> */}
         <CommentInput
+          isLoggedIn={isLoggedIn}
           onSubmit={onSubmit}
           comment={comment}
           setComment={setComment}
