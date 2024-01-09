@@ -1,6 +1,7 @@
 import Avatar from "../ui/avatar/avatar";
 import { CommentInput } from "../comment/commentInput";
 import Link from "next/link";
+import { PostBanner } from "../banner/postBanner";
 
 export function PostDetailCard({
   id,
@@ -28,7 +29,8 @@ export function PostDetailCard({
         {post.isPrivate ? <div className="badge badge-accent">비공개</div> : ""}
         <h2 className="card-title font-bold text-4xl">{post.title}</h2>
         <div className="divider"></div>
-        <p>{post.content}</p>
+        <p className="pb-20">{post.content}</p>
+        <PostBanner />
         <div className={`text-right`}>
           <Link
             href={`/posts/${id}/edit`}
@@ -58,7 +60,9 @@ export function PostDetailCard({
           </button>
           <button
             className={`btn ${
-              dislikes.some((dislikes: any) => dislikes.user.id === decodedToken.sub)
+              dislikes.some(
+                (dislikes: any) => dislikes.user.id === decodedToken.sub
+              )
                 ? ""
                 : "btn-outline"
             } btn-error mx-1`}
