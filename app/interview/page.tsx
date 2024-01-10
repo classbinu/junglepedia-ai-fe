@@ -103,13 +103,13 @@ export default function InterviewPage() {
   }, []);
 
   return (
-    <>
+    <div className="px-5">
       <div className="h-20">
         <div className="text-center mt-10">
           {topic === "" ? (
             <span className="loading loading-bars loading-lg"></span>
           ) : (
-            <h1 className="text-3xl font-semibold">{topic}</h1>
+            <h1 className="text-xl md:text-3xl font-semibold">{topic}</h1>
           )}
         </div>
       </div>
@@ -132,6 +132,6 @@ export default function InterviewPage() {
         answerPostLoading={answerPostLoading}
         buttonText="답변 제출"
       />
-    </>
+    </div>
   );
 }

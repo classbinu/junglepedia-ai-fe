@@ -108,7 +108,7 @@ export default function EditCommentPage({
   }, [params.uuid]);
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 px-5">
       <CommentInput
         isLoggedIn={isLoggedIn}
         onSubmit={onSubmit}

@@ -111,7 +111,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
   }, [params.uuid]);
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 px-5">
       <InterviewForm
         onSubmit={onSubmit}
         isPrivate={isPrivate}
