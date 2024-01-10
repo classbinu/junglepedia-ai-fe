@@ -25,7 +25,7 @@ export default function EditCommentPage({
   const fetchComment = async (uuid: string) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/comments/${uuid}`
+        `http://52.78.192.124:3009/comments/${uuid}`
       );
       const comment = await response.json();
       setComment(comment.content);
@@ -51,7 +51,7 @@ export default function EditCommentPage({
       const accessToken = await getAccessTokenAndValidate();
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/comments/${params.uuid}`,
+        `http://52.78.192.124:3009/comments/${params.uuid}`,
         {
           method: "PATCH",
           headers: {
@@ -89,7 +89,7 @@ export default function EditCommentPage({
     try {
       const accessToken = await getAccessTokenAndValidate();
 
-      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/comments/${id}`, {
+      await fetch(`http://52.78.192.124:3009/comments/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

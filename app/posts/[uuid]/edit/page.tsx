@@ -23,9 +23,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
 
   const fetchPost = async (uuid: string) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${uuid}`
-      );
+      const response = await fetch(`http://52.78.192.124:3009/posts/${uuid}`);
       const post = await response.json();
       setAnswer(post.content);
       setIsPrivate(post.isPrivate);
@@ -50,7 +48,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
       const accessToken = await getAccessTokenAndValidate();
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/posts/${params.uuid}`,
+        `http://52.78.192.124:3009/posts/${params.uuid}`,
         {
           method: "PATCH",
           headers: {
@@ -88,7 +86,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
     try {
       const accessToken = await getAccessTokenAndValidate();
 
-      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/${id}`, {
+      await fetch(`http://52.78.192.124:3009/posts/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

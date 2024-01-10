@@ -44,7 +44,7 @@ export default function InterviewPage() {
     try {
       const accessToken = await getAccessTokenAndValidate();
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/posts/`, {
+      const res = await fetch(`http://52.78.192.124:3009/posts/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -24,7 +24,7 @@ export default function PostListPage() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/posts?offset=${offset}&limit=${limit}`
+        `http://52.78.192.124:3009/posts?offset=${offset}&limit=${limit}`
       );
       const newPosts = await response.json();
 

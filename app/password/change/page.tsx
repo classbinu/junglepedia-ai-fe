@@ -27,7 +27,7 @@ export default function MypagePage() {
     try {
       const accessToken = await getAccessTokenAndValidate();
 
-      await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/auth/password`, {
+      await fetch(`http://52.78.192.124:3009/auth/password`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

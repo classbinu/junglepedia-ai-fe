@@ -31,7 +31,7 @@ export default function ProfilePage({ params }: { params: { uuid: string } }) {
   const fetchUser = useCallback(async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/users/${params.uuid}`,
+        `http://52.78.192.124:3009/users/${params.uuid}`,
         {
           headers: {
             "content-type": "application/json",
@@ -57,7 +57,7 @@ export default function ProfilePage({ params }: { params: { uuid: string } }) {
     setIsFetchingPost(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/posts?author=${params.uuid}&offset=${profileOffset}&limit=${limit}`,
+        `http://52.78.192.124:3009/posts?author=${params.uuid}&offset=${profileOffset}&limit=${limit}`,
         {
           headers: {
             "content-type": "application/json",

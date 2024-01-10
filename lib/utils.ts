@@ -31,17 +31,14 @@ export const getAccessTokenAndValidate = async (): Promise<string | null> => {
     }
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_API}/auth/refresh`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${refreshToken}`,
-          },
-          // body: JSON.stringify({ refreshToken }),
-        }
-      );
+      const response = await fetch(`http://52.78.192.124:3009/auth/refresh`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${refreshToken}`,
+        },
+        // body: JSON.stringify({ refreshToken }),
+      });
 
       if (response.ok) {
         const { accessToken, refreshToken } = await response.json();
