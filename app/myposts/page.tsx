@@ -11,7 +11,6 @@ export default function PostListPage() {
   const router = useRouter();
 
   const { isLoading, setIsLoading } = useContext(AppContext);
-  const [isFetchingPost, setIsFetchingPost] = useState(false);
   const limit = 20;
 
   const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
@@ -24,11 +23,11 @@ export default function PostListPage() {
       return; // 이미 충분한 게시글이 로드되었으므로 fetch하지 않습니다.
     }
 
-    if (isFetchingPost) {
+    if (isLoading || myAllDataLoaded) {
       console.log("already loading");
       return;
     }
-    setIsFetchingPost(true);
+    setIsLoading(true);
     try {
       const accessToken = await getAccessTokenAndValidate();
 
@@ -42,7 +41,7 @@ export default function PostListPage() {
       );
       const newPosts = await response.json();
 
-      if (newPosts.length < limit) {
+      if (newPosts.length < limit || newPosts.length === 0) {
         setMyAllDataLoaded(true);
       }
       // 특정 조건에서는 중복 렌더링 문제가 발생해서 중복 제거 로직을 추가함. offset 관리 방식 변경하면서 해결될 수도 있음.
@@ -56,12 +55,14 @@ export default function PostListPage() {
     } catch (error) {
       console.error(error);
     } finally {
-      setIsFetchingPost(false);
+      setIsLoading(false);
     }
   }, [
     myPosts.length,
     myOffset,
-    isFetchingPost,
+    isLoading,
+    myAllDataLoaded,
+    setIsLoading,
     setMyPosts,
     setMyAllDataLoaded,
   ]);

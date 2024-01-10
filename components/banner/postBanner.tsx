@@ -4,7 +4,7 @@ export function PostBanner() {
   return (
     <>
       <div className="rounded-full">
-        <a href="https://jungle.krafton.com/" target="_blank">
+        <a href="https://markcraft.site" target="_blank">
           <Image
             src="/images/banner.png"
             alt="banner"

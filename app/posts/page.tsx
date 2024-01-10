@@ -17,7 +17,7 @@ export default function PostListPage() {
       return; // 이미 충분한 게시글이 로드되었으므로 fetch하지 않습니다.
     }
 
-    if (isLoading) {
+    if (isLoading || allDataLoaded) {
       console.log("already loading");
       return;
     }
@@ -28,7 +28,7 @@ export default function PostListPage() {
       );
       const newPosts = await response.json();
 
-      if (newPosts.length < limit) {
+      if (newPosts.length < limit || newPosts.length === 0) {
         setAllDataLoaded(true);
       }
       // 특정 조건에서는 중복 렌더링 문제가 발생해서 중복 제거 로직을 추가함. offset 관리 방식 변경하면서 해결될 수도 있음.
