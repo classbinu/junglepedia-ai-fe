@@ -1,3 +1,4 @@
+import Link from "next/link";
 import topics from "@/data/topics";
 
 export default function Home() {
@@ -28,7 +29,12 @@ export default function Home() {
         className="animate__animated animate__fadeInUp"
         style={{ animationDelay: "1.5s" }}
       >
-        <button className="btn btn-wide btn-primary mt-5 text-white">면접 시작하기 🧑‍💻</button>
+        <Link
+          href="/interview"
+          className="btn btn-wide btn-primary mt-5 text-white"
+        >
+          면접 시작하기🧑‍💻
+        </Link>
       </div>
     </main>
   );
