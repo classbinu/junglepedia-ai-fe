@@ -24,6 +24,12 @@ export default function Home() {
       >
         {`AI 튜터에게 피드백을 받아 보세요`}
       </p>
+      <div
+        className="animate__animated animate__fadeInUp"
+        style={{ animationDelay: "1.5s" }}
+      >
+        <button className="btn btn-wide btn-primary mt-5 text-white">면접 시작하기 🧑‍💻</button>
+      </div>
     </main>
   );
 }
