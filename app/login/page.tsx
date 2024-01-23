@@ -15,11 +15,14 @@ export default function LoginPage() {
     let email = event.target.email.value;
     let password = event.target.password.value;
     try {
-      const res = await fetch(`http://52.78.192.124:3009/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        `https://junglepedia-ai-backend.fly.dev/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
       const data = await res.json();
       const { accessToken, refreshToken } = data;
       sessionStorage.setItem("accessToken", accessToken);

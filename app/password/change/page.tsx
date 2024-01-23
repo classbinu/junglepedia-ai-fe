@@ -27,7 +27,7 @@ export default function MypagePage() {
     try {
       const accessToken = await getAccessTokenAndValidate();
 
-      await fetch(`http://52.78.192.124:3009/auth/password`, {
+      await fetch(`https://junglepedia-ai-backend.fly.dev/auth/password`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -24,7 +24,7 @@ export default function PostListPage() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://52.78.192.124:3009/posts?offset=${offset}&limit=${limit}`
+        `https://junglepedia-ai-backend.fly.dev/posts?offset=${offset}&limit=${limit}`
       );
       const newPosts = await response.json();
 

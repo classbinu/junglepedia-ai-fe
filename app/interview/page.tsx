@@ -44,7 +44,7 @@ export default function InterviewPage() {
     try {
       const accessToken = await getAccessTokenAndValidate();
 
-      const res = await fetch(`http://52.78.192.124:3009/posts/`, {
+      const res = await fetch(`https://junglepedia-ai-backend.fly.dev/posts/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

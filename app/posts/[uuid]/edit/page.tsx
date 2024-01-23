@@ -23,7 +23,9 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
 
   const fetchPost = async (uuid: string) => {
     try {
-      const response = await fetch(`http://52.78.192.124:3009/posts/${uuid}`);
+      const response = await fetch(
+        `https://junglepedia-ai-backend.fly.dev/posts/${uuid}`
+      );
       const post = await response.json();
       setAnswer(post.content);
       setIsPrivate(post.isPrivate);
@@ -48,7 +50,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
       const accessToken = await getAccessTokenAndValidate();
 
       const res = await fetch(
-        `http://52.78.192.124:3009/posts/${params.uuid}`,
+        `https://junglepedia-ai-backend.fly.dev/posts/${params.uuid}`,
         {
           method: "PATCH",
           headers: {
@@ -86,7 +88,7 @@ export default function EditPostPage({ params }: { params: { uuid: string } }) {
     try {
       const accessToken = await getAccessTokenAndValidate();
 
-      await fetch(`http://52.78.192.124:3009/posts/${id}`, {
+      await fetch(`https://junglepedia-ai-backend.fly.dev/posts/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

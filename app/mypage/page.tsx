@@ -17,7 +17,7 @@ export default function MypagePage() {
   const handleMypage = async (event) => {
     event.preventDefault();
     try {
-      await fetch(`http://52.78.192.124:3009/users/${user.id}`, {
+      await fetch(`https://junglepedia-ai-backend.fly.dev/users/${user.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
@@ -34,7 +34,7 @@ export default function MypagePage() {
       const decodedToken = decodeToken(accessToken);
 
       const response = await fetch(
-        `http://52.78.192.124:3009/users/${decodedToken.sub}`,
+        `https://junglepedia-ai-backend.fly.dev/users/${decodedToken.sub}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

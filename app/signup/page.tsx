@@ -16,11 +16,14 @@ export default function SignupPage() {
     let email = event.target.email.value;
     let password = event.target.password.value;
     try {
-      const res = await fetch(`http://52.78.192.124:3009/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, isAdmin: true }),
-      });
+      const res = await fetch(
+        `https://junglepedia-ai-backend.fly.dev/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, isAdmin: true }),
+        }
+      );
       const data = await res.json();
       if (res.ok) {
         router.push("/login");

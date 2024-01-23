@@ -53,7 +53,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   const fetchPost = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://52.78.192.124:3009/posts/${params.uuid}`
+        `https://junglepedia-ai-backend.fly.dev/posts/${params.uuid}`
       );
       const post = await response.json();
       setPost(post);
@@ -65,13 +65,13 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   const fetchLikesAndDislikes = useCallback(async () => {
     try {
       const likes = await fetch(
-        `http://52.78.192.124:3009/posts/${params.uuid}/likes`
+        `https://junglepedia-ai-backend.fly.dev/posts/${params.uuid}/likes`
       );
       const likesData = await likes.json();
       setLikes(likesData);
 
       const dislikes = await fetch(
-        `http://52.78.192.124:3009/posts/${params.uuid}/dislikes`
+        `https://junglepedia-ai-backend.fly.dev/posts/${params.uuid}/dislikes`
       );
       const dislikesData = await dislikes.json();
       setDislikes(dislikesData);
@@ -83,7 +83,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
   const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://52.78.192.124:3009/posts/${params.uuid}/comments`
+        `https://junglepedia-ai-backend.fly.dev/posts/${params.uuid}/comments`
       );
       const data = await response.json();
       setComments(data);
@@ -107,7 +107,7 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
     try {
       const accessToken = await getAccessTokenAndValidate();
-      await fetch(`http://52.78.192.124:3009/comments/`, {
+      await fetch(`https://junglepedia-ai-backend.fly.dev/comments/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,12 +142,15 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
 
     try {
       const accessToken = await getAccessTokenAndValidate();
-      await fetch(`http://52.78.192.124:3009/posts/${params.uuid}/likes`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await fetch(
+        `https://junglepedia-ai-backend.fly.dev/posts/${params.uuid}/likes`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       await fetchLikesAndDislikes();
     } catch (error) {
       console.error(error);
@@ -176,12 +179,15 @@ export default function PostPage({ params }: { params: { uuid: string } }) {
     }
     try {
       const accessToken = await getAccessTokenAndValidate();
-      await fetch(`http://52.78.192.124:3009/posts/${params.uuid}/dislikes`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await fetch(
+        `https://junglepedia-ai-backend.fly.dev/posts/${params.uuid}/dislikes`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       await fetchLikesAndDislikes();
     } catch (error) {
       console.error(error);

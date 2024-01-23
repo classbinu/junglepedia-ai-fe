@@ -32,7 +32,7 @@ export default function PostListPage() {
       const accessToken = await getAccessTokenAndValidate();
 
       const response = await fetch(
-        `http://52.78.192.124:3009/posts/my?offset=${myOffset}&limit=${limit}`,
+        `https://junglepedia-ai-backend.fly.dev/posts/my?offset=${myOffset}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
